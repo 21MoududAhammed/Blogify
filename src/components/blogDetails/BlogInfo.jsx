@@ -8,7 +8,18 @@ export default function BlogInfo({ blog }) {
       <div className="flex justify-center items-center my-4 gap-4">
         <div className="flex items-center capitalize space-x-2">
           <div className="avater-img bg-indigo-600 text-white">
-            <span className="">{getFirstLetter(blog?.author?.firstName)}</span>
+          {blog?.author?.avatar ? (
+                <img
+                  className="rounded-full"
+                  src={`${
+                    import.meta.env.VITE_BASE_SERVER_URL
+                  }/uploads/avatar/${blog?.author?.avatar}`}
+                />
+              ) : (
+                <span className="">
+                  {getFirstLetter(blog?.author?.firstName)}
+                </span>
+              )}
           </div>
           <h5 className="text-slate-500 text-sm">
             {blog?.author?.firstName} {blog?.author?.lastName}

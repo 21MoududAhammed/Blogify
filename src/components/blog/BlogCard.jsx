@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
 import { getDate } from "../../utils";
 
 export default function BlogCard({ blog }) {
   return (
-    <div className="blog-card">
+    <Link to={`/blog-details/${blog?.id}`} className="blog-card">
       <img
         className="blog-thumb"
         src={`${import.meta.env.VITE_BASE_SERVER_URL}/uploads/blog/${
@@ -11,11 +12,7 @@ export default function BlogCard({ blog }) {
         alt=""
       />
       <div className="mt-2 relative">
-        <a href="./single-blog.html"></a>
-        <h3 className="text-slate-300 text-xl lg:text-2xl">
-          <a href="./single-blog.html"></a>
-          <a href="./single-blog.html">{blog?.title}</a>
-        </h3>
+        <h3 className="text-slate-300 text-xl lg:text-2xl">{blog?.title}</h3>
         <p className="mb-6 text-base text-slate-500 mt-1">{blog?.content}</p>
         {/* Meta Informations */}
         <div className="flex justify-between items-center">
@@ -25,9 +22,7 @@ export default function BlogCard({ blog }) {
             </div>
             <div>
               <h5 className="text-slate-500 text-sm">
-                <a href="./profile.html">
-                  {blog?.author?.firstName} {blog?.author?.lastName}
-                </a>
+                {blog?.author?.firstName} {blog?.author?.lastName}
               </h5>
               <div className="flex items-center text-xs text-slate-700">
                 <span>{getDate(blog?.createdAt)}</span>
@@ -57,6 +52,6 @@ export default function BlogCard({ blog }) {
         </div>
         {/* action dot ends */}
       </div>
-    </div>
+    </Link>
   );
 }

@@ -3,7 +3,7 @@ import Layout from "./components/layout/Layout";
 import Home from "./components/home/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import BlogDetails from "./components/blog/BlogDetails";
+import BlogDetails from "./components/blogDetails/BlogDetails";
 import CreateBlog from "./components/blog/CreateBlog";
 import Profile from "./components/profile/Profile";
 export default function App() {
@@ -13,7 +13,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/blog-details" element={<BlogDetails />} />
+        <Route path="/blog-details/:id" element={<BlogDetails />} />
         <Route path="/create-blog" element={<CreateBlog />} />
         <Route path="/me" element={<Profile />} />
       </Route>

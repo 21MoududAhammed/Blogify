@@ -11,6 +11,7 @@ export default function BlogContent() {
     const fetchBlogs = async () => {
       try {
         setLoading(true);
+        setError(null);
         const response = await api.get(`/blogs?page=1`);
         if (response.status === 200) {
           setBlogs(response.data.blogs);

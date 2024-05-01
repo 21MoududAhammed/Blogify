@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 export default function PopularBlog({ blog }) {
- 
   return (
     <li>
       <Link to={`/blog-details/${blog?.id}`}>
@@ -11,11 +10,7 @@ export default function PopularBlog({ blog }) {
       </Link>
 
       <p className="text-slate-600 text-sm">
-        by
-        <Link to="/me">
-          {" "}
-          {blog?.author?.firstName} {blog?.author?.lastName}
-        </Link>
+        by {blog?.author?.firstName} {blog?.author?.lastName}
         <span>·</span> {blog?.likes?.length} Likes
       </p>
     </li>

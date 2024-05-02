@@ -35,6 +35,7 @@ const BlogReducer = (state, action) => {
     case actions.blogs.FETCHING_ERROR:{
         return{
             ...state,
+            loading: false,
             error: action.payload,
         }
     }

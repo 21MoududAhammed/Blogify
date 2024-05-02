@@ -1,38 +1,44 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import BlogCard from "./BlogCard";
 import api from "../../api";
 import useFetchData from "../../hooks/useFetchData";
+import { BlogReducer, initialState } from "../../reducer/BlogsReducer";
+import actions from "../../actions";
 
 export default function BlogContent() {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [loadMore, setLoadMore] = useState(true);
+ 
+
+  const [state, dispatch] = useReducer(BlogReducer, initialState);
 
   const targetRef = useRef(null);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        setError(null);
-        setLoading(true);
-        const response = await api.get(`/blogs?page=${page}`);
-        
+        dispatch({
+          type: actions.blogs.FETCHING_START,
+        });
+        const response = await api.get(`/blogs?page=${state?.page}`);
+
         if (response.status === 200) {
-          console.log(response.data.blogs);
+          // console.log(response.data.blogs);
           if (response?.data?.blogs.length > 0) {
-            setBlogs([...blogs, ...response.data.blogs]);
-            setPage((prevPage) => prevPage + 1);
+            dispatch({
+              type: actions.blogs.FETCHED_BLOGS,
+              payload: response?.data?.blogs,
+            });
           } else {
-            setLoadMore(false);
+            dispatch({
+              type: actions.blogs.FETCHED_EMPTY_BLOGS,
+            });
           }
         }
       } catch (err) {
         console.log(err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        dispatch({
+          type: actions.blogs.FETCHING_ERROR,
+          payload: err.message,
+        });
       }
     };
 
@@ -48,18 +54,23 @@ export default function BlogContent() {
     return () => {
       observer.disconnect();
     };
-  }, [page]);
+  }, [state?.page]);
 
-  if (loading)
+  if (state?.loading)
     return <div className="space-y-3 md:col-span-5">Blogs fetching....</div>;
-  if (error) return <div className="space-y-3 md:col-span-5">{error}</div>;
+  if (state?.error)
+    return <div className="space-y-3 md:col-span-5">{state?.error}</div>;
   return (
     <>
       <div className="space-y-3 md:col-span-5">
-        {blogs?.map((blog, index) => (
+        {state?.blogs?.map((blog, index) => (
           <BlogCard key={index} blog={blog} />
         ))}
-        {loadMore ? <p ref={targetRef}>Loading....</p> : <p>No More Data</p>}
+        {state?.isMorePage ? (
+          <p ref={targetRef}>Loading....</p>
+        ) : (
+          <p>No More Data</p>
+        )}
       </div>
     </>
   );

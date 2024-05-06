@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom'
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo.jpg";
 import searchIcon from "../../assets/icons/search.svg";
 export default function Header() {
   return (
@@ -7,8 +7,9 @@ export default function Header() {
       <nav className="container">
         {/* Logo */}
         <div>
-          <Link to="/">
-            <img className="w-32" src={logo} alt="lws" />
+          <Link to="/" className='flex gap-2 items-center'>
+            <img className="w-10 rounded" src={logo} alt="lws" />
+            <h2 className='text-2xl font-bold font-serif'>Blogify</h2>
          </Link>
         </div>
         {/* Actions - Login, Write, Home, Search */}

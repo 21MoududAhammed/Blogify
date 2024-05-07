@@ -1,18 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Field from "../common/Field";
+import useAuth from "../../hooks/useAuth";
+
+import useAxios from "../../hooks/useAxios";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { auth, setAuth } = useAuth();
+  const { api } = useAxios();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
+    setError,
   } = useForm();
 
-  const onSubmit = formData =>{
-    console.log(formData);
-  }
+  const onSubmit = async (formData) => {
+    try {
+      const response = await api.post(`/auth/login`, formData);
+      if (response.status === 200) {
+        const { token, user } = response.data;
+        const authToken = token.accessToken;
+        const refreshToken = token.refreshToken;
+        
+        setAuth({
+          ...auth,
+          user: user,
+          authToken: authToken,
+          refreshToken: refreshToken,
+        });
+        navigate('/');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <section className="container">

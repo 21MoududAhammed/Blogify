@@ -3,6 +3,8 @@ import logo from "../../assets/logo.jpg";
 import searchIcon from "../../assets/icons/search.svg";
 import useAuth from "../../hooks/useAuth";
 import { getFirstLetter } from "../../utils";
+import Login from "../auth/Login";
+import Logout from "../auth/Logout";
 export default function Header() {
   const { auth } = useAuth();
   const user = auth?.user;
@@ -37,17 +39,24 @@ export default function Header() {
               </Link>
             </li>
             <li>
-              <Link
-                to="/login"
-                className="text-white/50 hover:text-white transition-all duration-200"
-              >
-                Login
-              </Link>
+              {!auth?.user ? (
+                <Link
+                  to="/login"
+                  className="text-white/50 hover:text-white transition-all duration-200"
+                >
+                  Login
+                </Link>
+              ) : (
+                <Logout />
+              )}
             </li>
             {user && (
               <li className="flex items-center">
                 {/* Circular Div with background color */}
-                <div className="avater-img bg-orange-600 text-white">
+                <Link
+                  to={"/me"}
+                  className="avater-img bg-orange-600 text-white"
+                >
                   {user?.avatar ? (
                     <img
                       className="w-10 rounded-full"
@@ -61,7 +70,7 @@ export default function Header() {
                   )}
 
                   {/* User's first name initial */}
-                </div>
+                </Link>
                 {/* Logged-in user's name */}
                 <Link to="/me">
                   <span className="text-white ml-2">{user?.firstName}</span>

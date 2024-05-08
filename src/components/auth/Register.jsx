@@ -1,24 +1,48 @@
 import { useForm } from "react-hook-form";
 import Field from "../common/Field";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 export default function Register() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+  const { auth, setAuth } = useAuth();
 
-  const onSubmit = formData =>{
-    console.log(formData);
-  }
+  const onSubmit = async (formData) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_SERVER_URL}/auth/register`,
+        formData
+      );
+      if (response?.status === 201) {
+        const { token, user } = response?.data;
+        setAuth({
+          ...auth,
+          authToken: token?.accessToken,
+          refreshToken: token?.refreshToken,
+          user: user,
+        });
+        toast.success(`${formData?.firstName} has registered.`);
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.warning(err?.message);
+    }
+  };
 
   return (
     <section className="container">
       <div className="w-full md:w-1/2 mx-auto bg-[#030317] p-8 rounded-md mt-12">
         <h2 className="text-2xl font-bold mb-6">Register</h2>
-        <form  onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Field
             label={"First Name"}
             htmlFor={"firstName"}
@@ -63,12 +87,12 @@ export default function Register() {
           >
             <input
               {...register("password", {
-                 required: "Password is required." ,
-                 minLength:{
-                    value: 8,
-                    message: 'At least 8 characters.'
-                 }
-                })}
+                required: "Password is required.",
+                minLength: {
+                  value: 8,
+                  message: "At least 8 characters.",
+                },
+              })}
               type="password"
               id="password"
               name="password"

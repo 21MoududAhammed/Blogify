@@ -34,7 +34,11 @@ export default function Register() {
       }
     } catch (err) {
       console.log(err);
-      toast.warning(err?.message);
+      if (err?.response?.data?.error) {
+        toast.warning(err.response.data.error);
+      } else {
+        toast.warning(err?.message);
+      }
     }
   };
 

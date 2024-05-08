@@ -1,5 +1,9 @@
-export default function Profile(){
-    return (
-        <h1>Profile</h1>
-    );
+import ProfileInfo from "./ProfileInfo";
+
+export default function Profile() {
+  return (
+    <div className="container">
+      <ProfileInfo />
+    </div>
+  );
 }

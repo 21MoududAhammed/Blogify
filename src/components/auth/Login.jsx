@@ -4,6 +4,7 @@ import Field from "../common/Field";
 import useAuth from "../../hooks/useAuth";
 
 import useAxios from "../../hooks/useAxios";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,17 +26,22 @@ export default function Login() {
         const { token, user } = response.data;
         const authToken = token.accessToken;
         const refreshToken = token.refreshToken;
-        
         setAuth({
           ...auth,
           user: user,
           authToken: authToken,
           refreshToken: refreshToken,
         });
-        navigate('/');
+        toast.success(`${formData?.email} logged in successfully.`);
+        navigate("/");
       }
     } catch (err) {
       console.log(err);
+      if (err?.response) {
+        toast.warning(err?.response?.data?.error);
+      } else {
+        toast.warning(err?.message);
+      }
     }
   };
 

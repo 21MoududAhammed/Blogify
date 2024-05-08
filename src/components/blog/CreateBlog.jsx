@@ -3,6 +3,7 @@ import Field from "../common/Field";
 import { useRef, useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function CreateBlog() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function CreateBlog() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm();
 
   const handleThumbnail = () => {
@@ -29,7 +31,7 @@ export default function CreateBlog() {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-    const tagsArray = data?.tags.split(',')
+    const tagsArray = data?.tags.split(",");
     if (thumbnail) {
       formData.append("thumbnail", thumbnail);
       formData.append("title", data.title);
@@ -39,11 +41,14 @@ export default function CreateBlog() {
       try {
         const response = await api.post(`/blogs`, formData);
         if (response?.status === 201) {
+          toast.success('A blog post created.')
           navigate("/");
         }
       } catch (err) {
         console.error(err);
       }
+    } else {
+      toast.warning('Select an image as thumbnail.');
     }
   };
 

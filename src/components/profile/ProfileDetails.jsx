@@ -6,27 +6,31 @@ import saveIcon from "../../assets/icons/save.svg";
 import { toast } from "react-toastify";
 
 export default function ProfileDetails() {
+  
   const { auth, setAuth } = useAuth();
   const user = auth?.user;
   const { api } = useAxios();
+  // state to toggle the input filed and text area 
   const [inputField, setInputField] = useState({
     bio: false,
     name: false,
   });
+  // state to manage the user's profile information 
   const [profileInfo, setProfileInfo] = useState({
     bio: user.bio ? user.bio : "",
     firstName: user.firstName ? user.firstName : "",
     lastName: user.lastName ? user.lastName : "",
   });
-
+//  after clicking add bio or edit icon to open a textarea 
   const handleBioInputField = () => {
     setInputField({ ...inputField, bio: true });
   };
 
+// after clicking edit icon to open two text area for firstName and lastName 
   const handleNameInputField = () => {
     setInputField({ ...inputField, name: true });
   };
-
+//  to update / edit bio 
   const handleUpdateBio = async () => {
     try {
       const item = { bio: profileInfo.bio };
@@ -41,6 +45,8 @@ export default function ProfileDetails() {
       toast.warning(err.message);
     }
   };
+
+  //to update name 
   const handleUpdateName = async (name) => {
     try {
       const item = {

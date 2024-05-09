@@ -57,7 +57,7 @@ export default function ProfileBlogCard({
         {/* Meta Informations */}
         <div className="flex justify-between items-center">
           <div className="flex items-center capitalize space-x-2">
-            <div className="avater-img bg-indigo-600 text-white">
+            <Link to='/me' className="avater-img bg-indigo-600 text-white">
               {blog?.author?.avatar ? (
                 <img
                   className="rounded-full"
@@ -70,11 +70,13 @@ export default function ProfileBlogCard({
                   {getFirstLetter(blog?.author?.firstName)}
                 </span>
               )}
-            </div>
+            </Link>
             <div>
-              <h5 className="text-slate-500 text-sm">
-                {blog?.author?.firstName} {blog?.author?.lastName}
-              </h5>
+              <Link to={"/me"}>
+                <h5 className="text-slate-500 text-sm">
+                  {blog?.author?.firstName} {blog?.author?.lastName}
+                </h5>
+              </Link>
 
               <div className="flex items-center text-xs text-slate-700">
                 <span>{getDate(blog?.createdAt)}</span>

@@ -9,11 +9,15 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 
 export default function FloatingActions({ blog, like, setLike }) {
+  // console.log(blog)
   const { auth } = useAuth();
+  
   const { api } = useAxios();
-
+  // there is a bug in backend. That's why blog?.isFavorite is always false 
   const [isFavorite, setIsFavorite] = useState(blog?.isFavourite);
+  
 
+  //  to like and unlike a blog
   const handleLike = async (blogId) => {
     try {
       const response = await api.post(`/blogs/${blogId}/like`);
@@ -23,6 +27,18 @@ export default function FloatingActions({ blog, like, setLike }) {
           isLiked: response?.data?.isLiked,
           likeQuantity: response?.data?.likes?.length,
         });
+      }
+    } catch (err) {
+      console.log(err);
+      toast.warning(err.message);
+    }
+  };
+
+  const handleIsFavorite = async (blogId) => {
+    try {
+      const response = await api.patch(`/blogs/${blog?.id}/favourite`);
+      if (response.status === 200) {
+        setIsFavorite(response?.data?.isFavourite);
       }
     } catch (err) {
       console.log(err);
@@ -41,7 +57,7 @@ export default function FloatingActions({ blog, like, setLike }) {
           <img src={like.isLiked ? filledLikeIcon : likeIcon} alt="like" />
           {like.likeQuantity > 0 && <span>{like.likeQuantity}</span>}
         </li>
-        <li onClick={() => setIsFavorite(!isFavorite)}>
+        <li onClick={handleIsFavorite}>
           {/* There is heart-filled.svg in the icons folder */}
           <img src={isFavorite ? filledHeartIcon : heartIcon} alt="Favourite" />
         </li>

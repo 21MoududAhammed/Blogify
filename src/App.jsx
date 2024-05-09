@@ -7,6 +7,7 @@ import BlogDetails from "./components/blogDetails/BlogDetails";
 import CreateBlog from "./components/blog/CreateBlog";
 import Profile from "./components/profile/Profile";
 import PrivateRoute from "./components/route/PrivateRoute";
+
 export default function App() {
   return (
     <Routes>

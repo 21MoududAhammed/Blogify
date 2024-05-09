@@ -4,12 +4,10 @@ import api from "../../api";
 import useFetchData from "../../hooks/useFetchData";
 import { BlogReducer, initialState } from "../../reducer/BlogsReducer";
 import actions from "../../actions";
+import useBlogs from "../../hooks/useBlogs";
 
 export default function BlogContent() {
- 
-
-  const [state, dispatch] = useReducer(BlogReducer, initialState);
-
+  const {state, dispatch} = useBlogs()
   const targetRef = useRef(null);
 
   useEffect(() => {

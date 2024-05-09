@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useBlocker } from "react-router-dom";
 import { getDate, getFirstLetter } from "../../utils";
 import threeDotsIcon from "../../assets/icons/3dots.svg";
 import editIcon from "../../assets/icons/edit.svg";
@@ -7,11 +7,14 @@ import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import useAxios from "../../hooks/useAxios";
 import { toast } from "react-toastify";
+import useBlogs from "../../hooks/useBlogs";
+import actions from "../../actions";
 
 export default function BlogCard({ blog }) {
   const [isShow, setIsShow] = useState(false);
   const { auth } = useAuth();
   const { api } = useAxios();
+  const { dispatch: blogsDispatch } = useBlogs();
 
   const handleToggleActions = () => {
     setIsShow(!isShow);
@@ -21,9 +24,13 @@ export default function BlogCard({ blog }) {
     try {
       const response = await api.delete(`/blogs/${blogId}`);
       if (response.status === 200) {
+        blogsDispatch({
+          type: actions.blogs.BLOG_DELETED,
+          payload: blogId,
+        });
+        setIsShow(false);
         toast.success(response?.data?.message);
       }
-      console.log(response);
     } catch (err) {
       console.log(err);
       toast.warning(err.message);

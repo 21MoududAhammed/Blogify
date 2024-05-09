@@ -32,12 +32,18 @@ const BlogReducer = (state, action) => {
         loading: false,
       };
     }
-    case actions.blogs.FETCHING_ERROR:{
-        return{
-            ...state,
-            loading: false,
-            error: action.payload,
-        }
+    case actions.blogs.BLOG_DELETED: {
+      return {
+        ...state,
+        blogs: state?.blogs?.filter((item) => item.id !== action.payload),
+      };
+    }
+    case actions.blogs.FETCHING_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     }
 
     default: {

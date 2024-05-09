@@ -10,7 +10,9 @@ export default function () {
   const { data, loading, error } = useFetchData(`/profile/${userId}`);
 
   useEffect(() => {
-    setProfileBlogs(data?.blogs);
+    setProfileBlogs(() =>
+      data?.blogs?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    );
   }, [data]);
 
   if (loading) return <div>Loading...</div>;

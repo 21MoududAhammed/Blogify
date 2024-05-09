@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import useFetchData from "../../hooks/useFetchData";
-import BlogCard from "../blog/BlogCard";
-import useProfileBlogs from "../../hooks/useProfileBlogs";
 import ProfileBlogCard from "./ProfileBlogCard";
 
 export default function () {
   const { auth } = useAuth();
-  const { profileBlogs, setProfileBlogs } = useProfileBlogs();
   const userId = auth?.user?.id;
+  const [profileBlogs, setProfileBlogs] = useState([]);
   const { data, loading, error } = useFetchData(`/profile/${userId}`);
 
   useEffect(() => {

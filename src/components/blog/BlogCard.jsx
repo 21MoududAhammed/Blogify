@@ -1,19 +1,51 @@
 import { Link } from "react-router-dom";
 import { getDate, getFirstLetter } from "../../utils";
+import threeDotsIcon from "../../assets/icons/3dots.svg";
+import editIcon from "../../assets/icons/edit.svg";
+import deleteIcon from "../../assets/icons/delete.svg";
+import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
+import { toast } from "react-toastify";
 
 export default function BlogCard({ blog }) {
+  const [isShow, setIsShow] = useState(false);
+  const { auth } = useAuth();
+  const { api } = useAxios();
+
+  const handleToggleActions = () => {
+    setIsShow(!isShow);
+  };
+
+  const handleDeleteBlog = async (blogId) => {
+    try {
+      const response = await api.delete(`/blogs/${blogId}`);
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+      }
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+      toast.warning(err.message);
+    }
+  };
+
   return (
-    <Link to={`/blog-details/${blog?.id}`} className="blog-card">
-      <img
-        className="blog-thumb"
-        src={`${import.meta.env.VITE_BASE_SERVER_URL}/uploads/blog/${
-          blog?.thumbnail
-        }`}
-        alt=""
-      />
+    <div className="blog-card">
+      <Link to={`/blog-details/${blog?.id}`}>
+        <img
+          className="blog-thumb"
+          src={`${import.meta.env.VITE_BASE_SERVER_URL}/uploads/blog/${
+            blog?.thumbnail
+          }`}
+          alt=""
+        />
+      </Link>
       <div className="mt-2 relative">
-        <h3 className="text-slate-300 text-xl lg:text-2xl">{blog?.title}</h3>
-        <p className="mb-6 text-base text-slate-500 mt-1">{blog?.content}</p>
+        <Link to={`/blog-details/${blog?.id}`}>
+          <h3 className="text-slate-300 text-xl lg:text-2xl">{blog?.title}</h3>
+          <p className="mb-6 text-base text-slate-500 mt-1">{blog?.content}</p>
+        </Link>
         {/* Meta Informations */}
         <div className="flex justify-between items-center">
           <div className="flex items-center capitalize space-x-2">
@@ -46,24 +78,31 @@ export default function BlogCard({ blog }) {
           </div>
         </div>
         {/* action dot */}
-        <div className="absolute right-0 top-0 hidden">
-          <button>
-            <img src="./assets/icons/3dots.svg" alt="3dots of Action" />
-          </button>
-          {/* Action Menus Popup */}
-          <div className="action-modal-container">
-            <button className="action-menu-item hover:text-lwsGreen">
-              <img src="./assets/icons/edit.svg" alt="Edit" />
-              Edit
+        {auth?.user?.id === blog?.author?.id && (
+          <div className="absolute right-0 top-0 ">
+            <button onClick={handleToggleActions}>
+              <img src={threeDotsIcon} alt="3dots of Action" />
             </button>
-            <button className="action-menu-item hover:text-red-500">
-              <img src="./assets/icons/delete.svg" alt="Delete" />
-              Delete
-            </button>
+            {/* Action Menus Popup */}
+            {isShow && (
+              <div className="action-modal-container">
+                <button className="action-menu-item hover:text-lwsGreen">
+                  <img src={editIcon} alt="Edit" />
+                  Edit
+                </button>
+                <button
+                  className="action-menu-item hover:text-red-500"
+                  onClick={() => handleDeleteBlog(blog?.id)}
+                >
+                  <img src={deleteIcon} alt="Delete" />
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
-        </div>
+        )}
         {/* action dot ends */}
       </div>
-    </Link>
+    </div>
   );
 }

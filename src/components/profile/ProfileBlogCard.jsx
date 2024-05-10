@@ -18,10 +18,12 @@ export default function ProfileBlogCard({
   const [isShow, setIsShow] = useState(false);
   const { api } = useAxios();
 
+  // to toggle the edit and delete bar with clicking on three dots
   const handleToggleActions = () => {
     setIsShow(!isShow);
   };
 
+  // to delete a blog
   const handleDeleteBlog = async (blogId) => {
     try {
       const response = await api.delete(`/blogs/${blogId}`);
@@ -57,7 +59,7 @@ export default function ProfileBlogCard({
         {/* Meta Informations */}
         <div className="flex justify-between items-center">
           <div className="flex items-center capitalize space-x-2">
-            <Link to='/me' className="avater-img bg-indigo-600 text-white">
+            <Link to="/me" className="avater-img bg-indigo-600 text-white">
               {blog?.author?.avatar ? (
                 <img
                   className="rounded-full"
@@ -88,7 +90,6 @@ export default function ProfileBlogCard({
           </div>
         </div>
         {/* action dot */}
-
         <div className="absolute right-0 top-0 ">
           <button onClick={handleToggleActions}>
             <img src={threeDotsIcon} alt="3dots of Action" />
@@ -96,10 +97,13 @@ export default function ProfileBlogCard({
           {/* Action Menus Popup */}
           {isShow && (
             <div className="action-modal-container">
-              <button className="action-menu-item hover:text-lwsGreen">
-                <img src={editIcon} alt="Edit" />
-                Edit
-              </button>
+              <Link to={`/create-blog/${blog?.id}`}>
+                <button className="action-menu-item hover:text-lwsGreen">
+                  <img src={editIcon} alt="Edit" />
+                  Edit
+                </button>
+              </Link>
+
               <button
                 className="action-menu-item hover:text-red-500"
                 onClick={() => handleDeleteBlog(blog?.id)}

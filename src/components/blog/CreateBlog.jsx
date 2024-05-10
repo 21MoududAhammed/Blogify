@@ -1,27 +1,39 @@
 import { useForm } from "react-hook-form";
 import Field from "../common/Field";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAxios from "../../hooks/useAxios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import useFetchSingleBlog from "../../hooks/useFetchSingleBlog";
+import useBlogs from "../../hooks/useBlogs";
+import actions from "../../actions";
 
 export default function CreateBlog() {
+  const { blogId } = useParams();
   const navigate = useNavigate();
   const { api } = useAxios();
+  // in the time of creating a blog, blogId will be undefined and blog will be {} 
+  const { blog } = useFetchSingleBlog(blogId);
+  const { dispatch } = useBlogs();
   const inputRef = useRef();
   const [thumbnail, setThumbnail] = useState(null);
+  // state to display the image which user selects to post 
   const [thumbnailURL, setThumbnailURL] = useState(null);
+  // react hook form 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    setValue,
   } = useForm();
 
+//  to trigger the input file to take a image 
   const handleThumbnail = () => {
     inputRef.current.click();
   };
 
+  // get an image when user select it 
   const getThumbnail = (e) => {
     const file = e.target.files[0];
     const cashThumbnail = URL.createObjectURL(file);
@@ -29,6 +41,7 @@ export default function CreateBlog() {
     setThumbnail(file);
   };
 
+  // post a new blog
   const onSubmit = async (data) => {
     const formData = new FormData();
     const tagsArray = data?.tags.split(",");
@@ -37,20 +50,54 @@ export default function CreateBlog() {
       formData.append("title", data.title);
       formData.append("content", data.content);
       formData.append("tags", tagsArray);
-
-      try {
-        const response = await api.post(`/blogs`, formData);
-        if (response?.status === 201) {
-          toast.success('A blog post created.')
-          navigate("/");
+      
+      if (Object.keys(blog).length > 0) {
+        // update / edit a blog 
+        try {
+          const response = await api.patch(`/blogs/${blog?.id}`, formData);
+          if (response?.status === 200) {
+            toast.success(`Updated Successfully.`);
+            dispatch({
+              type: actions.blogs.BLOG_EDITED,
+              payload: response?.data,
+            });
+            navigate(`/blog-details/${blogId}`);
+          }
+          // console.log(response);
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.error(err);
+      } else {
+        // create a new blog 
+        try {
+          const response = await api.post(`/blogs`, formData);
+          if (response?.status === 201) {
+            toast.success("A blog post created.");
+            navigate("/");
+          }
+        } catch (err) {
+          console.error(err);
+        }
       }
     } else {
-      toast.warning('Select an image as thumbnail.');
+      toast.warning("Select an image as thumbnail.");
     }
   };
+
+  // set initial state for edit a blog. it's not applicable for create blog 
+  useEffect(() => {
+    if (Object.keys(blog).length > 0) {
+      setValue("title", blog?.title);
+      setValue("tags", blog?.tags);
+      setValue("content", blog?.content);
+      setThumbnail(blog?.thumbnail);
+      setThumbnailURL(
+        `${import.meta.env.VITE_BASE_SERVER_URL}/uploads/blog/${
+          blog?.thumbnail
+        }`
+      );
+    }
+  }, [blog, setValue]);
 
   return (
     <div className="container">
@@ -128,7 +175,7 @@ export default function CreateBlog() {
           type="submit"
           className="bg-indigo-600 text-white px-6 py-2 md:py-3 rounded-md hover:bg-indigo-700 transition-all duration-200"
         >
-          Create Blog
+          {Object.keys(blog).length > 0 ? "Save Blog" : "Create Blog"}
         </button>
       </form>
     </div>

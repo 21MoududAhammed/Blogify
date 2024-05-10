@@ -18,6 +18,7 @@ export default function App() {
         <Route path="/blog-details/:id" element={<BlogDetails />} />
         <Route element={<PrivateRoute />}>
           <Route path="/create-blog" element={<CreateBlog />} />
+          <Route path="/create-blog/:blogId" element={<CreateBlog />} />
           <Route path="/me" element={<Profile />} />
         </Route>
       </Route>

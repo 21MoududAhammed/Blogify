@@ -93,10 +93,12 @@ export default function BlogCard({ blog }) {
             {/* Action Menus Popup */}
             {isShow && (
               <div className="action-modal-container">
-                <button className="action-menu-item hover:text-lwsGreen">
-                  <img src={editIcon} alt="Edit" />
-                  Edit
-                </button>
+                <Link to={`/create-blog/${blog?.id}`}>
+                  <button className="action-menu-item hover:text-lwsGreen">
+                    <img src={editIcon} alt="Edit" />
+                    Edit
+                  </button>
+                </Link>
                 <button
                   className="action-menu-item hover:text-red-500"
                   onClick={() => handleDeleteBlog(blog?.id)}

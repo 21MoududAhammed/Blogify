@@ -38,6 +38,14 @@ const BlogReducer = (state, action) => {
         blogs: state?.blogs?.filter((item) => item.id !== action.payload),
       };
     }
+    case actions.blogs.BLOG_EDITED: {
+      return {
+        ...state,
+        blogs: state?.blogs?.map((blog) =>
+          blog.id !== action.payload.id ? blog : action.payload
+        ),
+      };
+    }
     case actions.blogs.FETCHING_ERROR: {
       return {
         ...state,

@@ -11,7 +11,7 @@ export default function BlogComments({ blog, blogComments, setBlogComments }) {
   const { auth } = useAuth();
   const { api } = useAxios();
   const navigate = useNavigate();
-
+  //  to do a comment
   const handleComment = async () => {
     if (!auth?.user) {
       toast.warning("Please Login to comment.");
@@ -28,6 +28,21 @@ export default function BlogComments({ blog, blogComments, setBlogComments }) {
       } catch (err) {
         console.log(err);
       }
+    }
+  };
+
+  // to delete a comment
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const response = await api.delete(
+        `/blogs/${blog?.id}/comment/${commentId}`
+      );
+      if(response.status === 200){
+        setBlogComments(response?.data?.comments)
+        toast.success('Deleted Successfully.')
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -68,7 +83,11 @@ export default function BlogComments({ blog, blogComments, setBlogComments }) {
         </div>
         {blogComments?.length > 0 &&
           blogComments?.map((comment) => (
-            <Comment key={comment?.id} comment={comment} />
+            <Comment
+              key={comment?.id}
+              comment={comment}
+              onDeleteComment={handleDeleteComment}
+            />
           ))}
       </div>
     </section>

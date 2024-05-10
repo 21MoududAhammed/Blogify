@@ -5,17 +5,19 @@ import filledHeartIcon from "../../assets/icons/heart-filled.svg";
 import commentIcon from "../../assets/icons/comment.svg";
 import { useEffect, useState } from "react";
 import useAxios from "../../hooks/useAxios";
-import useAuth from "../../hooks/useAuth";
+// import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 
 export default function FloatingActions({ blog, like, setLike }) {
-  // console.log(blog)
-  const { auth } = useAuth();
-  
+  // const { auth } = useAuth();
   const { api } = useAxios();
-  // there is a bug in backend. That's why blog?.isFavorite is always false 
+  // there is a bug in backend. That's why blog?.isFavorite is always false
   const [isFavorite, setIsFavorite] = useState(blog?.isFavourite);
-  
+
+  // there was another way to handle it but this is also not update all the time 
+  // const [isFavorite, setIsFavorite] = useState(() =>
+  //   auth?.user?.favourites?.some((item) => item.id === blog.id)
+  // );
 
   //  to like and unlike a blog
   const handleLike = async (blogId) => {

@@ -1,7 +1,7 @@
 import useFetchData from "../../hooks/useFetchData";
 import PopularBlog from "./PopularBlog";
 
-export default function MostPopular() {
+export default function MostPopularBlogs() {
   const { data, loading, error } = useFetchData("/blogs/popular");
   const blogs = data?.blogs;
 

@@ -9,6 +9,7 @@ export default function YourFavorite() {
   const [loading, setLoading] = useState(false);
   const { api } = useAxios();
 
+  //  to fetch the favoriteBlogs
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -27,8 +28,6 @@ export default function YourFavorite() {
     };
     fetchFavorites();
   }, []);
-
- 
 
   if (loading) return <div>Data Fetching...</div>;
   if (error) return <div>{error}</div>;

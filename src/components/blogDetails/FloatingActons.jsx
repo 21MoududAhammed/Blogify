@@ -8,13 +8,14 @@ import useAxios from "../../hooks/useAxios";
 // import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 
-export default function FloatingActions({ blog, like, setLike }) {
+export default function FloatingActions({ blog, like, setLike, blogComments }) {
+ 
   // const { auth } = useAuth();
   const { api } = useAxios();
   // there is a bug in backend. That's why blog?.isFavorite is always false
   const [isFavorite, setIsFavorite] = useState(blog?.isFavourite);
 
-  // there was another way to handle it but this is also not update all the time 
+  // there was another way to handle it but this is also not update all the time
   // const [isFavorite, setIsFavorite] = useState(() =>
   //   auth?.user?.favourites?.some((item) => item.id === blog.id)
   // );
@@ -35,7 +36,7 @@ export default function FloatingActions({ blog, like, setLike }) {
       toast.warning(err.message);
     }
   };
-
+  //  to set and reset the favorite
   const handleIsFavorite = async (blogId) => {
     try {
       const response = await api.patch(`/blogs/${blog?.id}/favourite`);
@@ -66,7 +67,7 @@ export default function FloatingActions({ blog, like, setLike }) {
         <a href="#comments">
           <li>
             <img src={commentIcon} alt="Comments" />
-            <span>3</span>
+            {blogComments?.length > 0 && <span>{blogComments?.length}</span>}
           </li>
         </a>
       </ul>

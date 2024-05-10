@@ -13,11 +13,13 @@ export default function BlogDetails() {
   const [blog, setBlog] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  // state to handle the like and unlike
   const [like, setLike] = useState({
     isLiked: false,
     likeQuantity: 0,
   });
+  // state to handle the comments
+  const [blogComments, setBlogComments] = useState([]);
 
   // load the blog
   useEffect(() => {
@@ -40,13 +42,15 @@ export default function BlogDetails() {
     fetchBlog();
   }, []);
 
-  // to set the initial state of like after getting blog
+  // to set the initial state of like and comment after getting blog
+  // Because it will set unexpected value before getting blog as react never set the initial value twice
   useEffect(() => {
     setLike({
       ...like,
       isLiked: blog?.likes?.some((item) => item.id === auth?.user?.id),
       likeQuantity: blog?.likes?.length,
     });
+    setBlogComments(blog?.comments);
   }, [blog]);
 
   if (loading) return <div>Loading....</div>;
@@ -57,9 +61,13 @@ export default function BlogDetails() {
       {Object.keys(blog).length !== 0 && (
         <>
           <BlogInfo blog={blog} likeQuantity={like.likeQuantity} />
-          <BlogComments blog={blog} />
+          <BlogComments
+            blog={blog}
+            blogComments={blogComments}
+            setBlogComments={setBlogComments}
+          />
           {auth?.user && (
-            <FloatingActions blog={blog} like={like} setLike={setLike} />
+            <FloatingActions blog={blog} like={like} setLike={setLike} blogComments={blogComments}/>
           )}
         </>
       )}

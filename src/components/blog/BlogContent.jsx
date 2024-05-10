@@ -7,7 +7,7 @@ import actions from "../../actions";
 import useBlogs from "../../hooks/useBlogs";
 
 export default function BlogContent() {
-  const {state, dispatch} = useBlogs()
+  const { state, dispatch } = useBlogs();
   const targetRef = useRef(null);
 
   useEffect(() => {
@@ -19,7 +19,6 @@ export default function BlogContent() {
         const response = await api.get(`/blogs?page=${state?.page}`);
 
         if (response.status === 200) {
-          // console.log(response.data.blogs);
           if (response?.data?.blogs.length > 0) {
             dispatch({
               type: actions.blogs.FETCHED_BLOGS,
@@ -61,13 +60,13 @@ export default function BlogContent() {
   return (
     <>
       <div className="space-y-3 md:col-span-5">
-        {state?.blogs?.map((blog, index) => (
-          <BlogCard key={index} blog={blog} />
+        {state?.blogs?.map((blog) => (
+          <BlogCard key={blog?.id} blog={blog} />
         ))}
         {state?.isMorePage ? (
           <p ref={targetRef}>Loading....</p>
         ) : (
-          <p>No More Data</p>
+          <p>No more blogs.</p>
         )}
       </div>
     </>

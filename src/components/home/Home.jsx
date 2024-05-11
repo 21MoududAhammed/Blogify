@@ -6,6 +6,7 @@ export default function Home() {
   const { auth } = useAuth();
   return (
     <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+      
       {/* blog content  */}
       <BlogContent />
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import { toast } from "react-toastify";
 import FavoriteBlog from "./FavoriteBlog";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function YourFavorite() {
   const [favoriteBlogs, setFavoriteBlogs] = useState([]);
@@ -29,14 +30,17 @@ export default function YourFavorite() {
     fetchFavorites();
   }, []);
 
-  if (loading) return <div>Data Fetching...</div>;
-  if (error) return <div>{error}</div>;
-
   return (
     <div className="sidebar-card">
       <h3 className="text-slate-300 text-xl lg:text-2xl font-semibold">
         Your Favorites ❤️
       </h3>
+      {loading && (
+        <div className="my-5">
+          <LoadingSpinner />
+        </div>
+      )}
+      {error && <div>Failed to fetch blogs. Please try again.</div>}
       <ul className="space-y-5 my-5">
         {favoriteBlogs?.length > 0 &&
           favoriteBlogs.map((blog) => (

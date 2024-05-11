@@ -5,6 +5,7 @@ import useFetchData from "../../hooks/useFetchData";
 import { BlogReducer, initialState } from "../../reducer/BlogsReducer";
 import actions from "../../actions";
 import useBlogs from "../../hooks/useBlogs";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function BlogContent() {
   const { state, dispatch } = useBlogs();
@@ -34,7 +35,7 @@ export default function BlogContent() {
         console.log(err);
         dispatch({
           type: actions.blogs.FETCHING_ERROR,
-          payload: err.message,
+          payload: 'Error fetching blogs. Please try again.',
         });
       }
     };
@@ -68,7 +69,7 @@ export default function BlogContent() {
           <BlogCard key={blog?.id} blog={blog} />
         ))}
         {state?.isMorePage ? (
-          <p ref={targetRef}>Loading....</p>
+          <div ref={targetRef}><LoadingSpinner/></div>
         ) : (
           <p>No more blogs.</p>
         )}

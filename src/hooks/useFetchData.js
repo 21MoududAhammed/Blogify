@@ -8,6 +8,8 @@ const useFetchData = (fetchUrl) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null);
+        setLoading(true);
         const response = await api.get(`${fetchUrl}`);
         if (response.status === 200) {
           setData(response.data);
@@ -15,6 +17,8 @@ const useFetchData = (fetchUrl) => {
       } catch (err) {
         console.log(err);
         setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();

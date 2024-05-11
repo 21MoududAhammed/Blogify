@@ -1,4 +1,5 @@
 import useFetchData from "../../hooks/useFetchData";
+import LoadingSpinner from "../common/LoadingSpinner";
 import PopularBlog from "./PopularBlog";
 
 export default function MostPopularBlogs() {
@@ -11,16 +12,13 @@ export default function MostPopularBlogs() {
         Most Popular 👍️
       </h3>
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <ul className="space-y-5 my-5">
-          {blogs?.length > 0 &&
-            blogs.map((blog) => <PopularBlog key={blog?.id} blog={blog} />)}
-        </ul>
-      )}
+      {loading && <div className="my-5"> <LoadingSpinner /> </div>}
+      {error && <p>Failed to fetch blogs. Please try again.</p>}
+
+      <ul className="space-y-5 my-5">
+        {blogs?.length > 0 &&
+          blogs.map((blog) => <PopularBlog key={blog?.id} blog={blog} />)}
+      </ul>
     </div>
   );
 }

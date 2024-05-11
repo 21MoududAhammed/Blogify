@@ -7,12 +7,14 @@ import useFetchData from "../../hooks/useFetchData";
 import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import useFetchSingleBlog from "../../hooks/useFetchSingleBlog";
 export default function BlogDetails() {
+  // blogId 
   const { id } = useParams();
   const { auth } = useAuth();
-  const [blog, setBlog] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // fetch a blog 
+  const {blog, loading, error} = useFetchSingleBlog(id);
+  
   // state to handle the like and unlike
   const [like, setLike] = useState({
     isLiked: false,
@@ -20,27 +22,6 @@ export default function BlogDetails() {
   });
   // state to handle the comments
   const [blogComments, setBlogComments] = useState([]);
-
-  // load the blog
-  useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_SERVER_URL}/blogs/${id}`
-        );
-        if (response.status === 200) {
-          setBlog(response.data);
-        }
-      } catch (err) {
-        console.log(err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBlog();
-  }, []);
 
   // to set the initial state of like and comment after getting blog
   // Because it will set unexpected value before getting blog as react never set the initial value twice

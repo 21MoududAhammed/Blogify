@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
-import searchIcon from "../../assets/icons/search.svg";
 import useAuth from "../../hooks/useAuth";
 import { getFirstLetter } from "../../utils";
 import Login from "../auth/Login";
 import Logout from "../auth/Logout";
+import Search from "../search/Search";
 export default function Header() {
   const { auth } = useAuth();
   const user = auth?.user;
@@ -33,10 +33,7 @@ export default function Header() {
               </Link>
             </li>
             <li>
-              <Link to="#" className="flex items-center gap-2 cursor-pointer">
-                <img src={searchIcon} alt="Search" />
-                <span>Search</span>
-              </Link>
+              <Search />
             </li>
             <li>
               {!auth?.user ? (

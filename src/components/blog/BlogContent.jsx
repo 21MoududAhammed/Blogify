@@ -40,16 +40,20 @@ export default function BlogContent() {
     };
 
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && state.isMorePage) {
         fetchBlogs();
       }
     });
-    // set the target to observe or watch
-    observer.observe(targetRef.current);
+    // set the target to observe or watch if the targeted element is added in the dom
+    if (targetRef.current instanceof Element) {
+      observer.observe(targetRef.current);
+    }
 
     // clean up
     return () => {
-      observer.disconnect();
+      if (targetRef.current instanceof Element) {
+        observer.unobserve(targetRef.current);
+      }
     };
   }, [state?.page]);
 

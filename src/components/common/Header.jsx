@@ -32,9 +32,11 @@ export default function Header() {
                 Write
               </Link>
             </li>
-            <li>
-              <Search />
-            </li>
+            {user && (
+              <li>
+                <Search />
+              </li>
+            )}
             <li>
               {!auth?.user ? (
                 <Link

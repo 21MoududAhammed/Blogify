@@ -9,12 +9,12 @@ import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import useFetchSingleBlog from "../../hooks/useFetchSingleBlog";
 export default function BlogDetails() {
-  // blogId 
+  // blogId
   const { id } = useParams();
   const { auth } = useAuth();
-  // fetch a blog 
-  const {blog, loading, error} = useFetchSingleBlog(id);
-  
+  // fetch a blog
+  const { blog, loading, error } = useFetchSingleBlog(id);
+
   // state to handle the like and unlike
   const [like, setLike] = useState({
     isLiked: false,
@@ -47,9 +47,13 @@ export default function BlogDetails() {
             blogComments={blogComments}
             setBlogComments={setBlogComments}
           />
-          {auth?.user && (
-            <FloatingActions blog={blog} like={like} setLike={setLike} blogComments={blogComments}/>
-          )}
+
+          <FloatingActions
+            blog={blog}
+            like={like}
+            setLike={setLike}
+            blogComments={blogComments}
+          />
         </>
       )}
     </>

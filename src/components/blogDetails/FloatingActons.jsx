@@ -5,12 +5,11 @@ import filledHeartIcon from "../../assets/icons/heart-filled.svg";
 import commentIcon from "../../assets/icons/comment.svg";
 import { useEffect, useState } from "react";
 import useAxios from "../../hooks/useAxios";
-// import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 
 export default function FloatingActions({ blog, like, setLike, blogComments }) {
- 
-  // const { auth } = useAuth();
+  const { auth } = useAuth();
   const { api } = useAxios();
   // there is a bug in backend. That's why blog?.isFavorite is always false
   const [isFavorite, setIsFavorite] = useState(blog?.isFavourite);
@@ -22,30 +21,38 @@ export default function FloatingActions({ blog, like, setLike, blogComments }) {
 
   //  to like and unlike a blog
   const handleLike = async (blogId) => {
-    try {
-      const response = await api.post(`/blogs/${blogId}/like`);
-      if (response.status === 200) {
-        setLike({
-          ...like,
-          isLiked: response?.data?.isLiked,
-          likeQuantity: response?.data?.likes?.length,
-        });
+    if (!auth?.user) {
+      toast.warning("Login to like!");
+    } else {
+      try {
+        const response = await api.post(`/blogs/${blogId}/like`);
+        if (response.status === 200) {
+          setLike({
+            ...like,
+            isLiked: response?.data?.isLiked,
+            likeQuantity: response?.data?.likes?.length,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+        toast.warning(err.message);
       }
-    } catch (err) {
-      console.log(err);
-      toast.warning(err.message);
     }
   };
   //  to set and reset the favorite
   const handleIsFavorite = async (blogId) => {
-    try {
-      const response = await api.patch(`/blogs/${blog?.id}/favourite`);
-      if (response.status === 200) {
-        setIsFavorite(response?.data?.isFavourite);
+    if (!auth?.user) {
+      toast.warning("Login to react!");
+    } else {
+      try {
+        const response = await api.patch(`/blogs/${blog?.id}/favourite`);
+        if (response.status === 200) {
+          setIsFavorite(response?.data?.isFavourite);
+        }
+      } catch (err) {
+        console.log(err);
+        toast.warning(err.message);
       }
-    } catch (err) {
-      console.log(err);
-      toast.warning(err.message);
     }
   };
 

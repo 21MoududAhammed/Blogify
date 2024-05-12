@@ -1,10 +1,10 @@
 #Blogify 
 
-First install the npm 
+Install All packages
 ```
 npm install
 ```
-Then run 
+Start Server
 ```
 npm run dev
 ```

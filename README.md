@@ -1,4 +1,4 @@
-#Blogify 
+# Blogify 
 
 Install All packages
 ```
@@ -8,4 +8,4 @@ Start Server
 ```
 npm run dev
 ```
-[Blogify Backend](https://github.com/21MoududAhammed/Blogify-Backend)
+[Click to get Blogify Backend](https://github.com/21MoududAhammed/Blogify-Backend)

@@ -35,7 +35,7 @@ export default function BlogContent() {
         console.log(err);
         dispatch({
           type: actions.blogs.FETCHING_ERROR,
-          payload: 'Error fetching blogs. Please try again.',
+          payload: "Error fetching blogs. Please try again.",
         });
       }
     };
@@ -59,9 +59,13 @@ export default function BlogContent() {
   }, [state?.page]);
 
   if (state?.loading)
-    return <div className="space-y-3 md:col-span-5">Blogs fetching....</div>;
+    return (
+      <div className="my-5">
+        <LoadingSpinner />
+      </div>
+    );
   if (state?.error)
-    return <div className="space-y-3 md:col-span-5">{state?.error}</div>;
+    return <div className="my-5">Failed to fetch blogs. Please try again.</div>;
   return (
     <>
       <div className="space-y-3 md:col-span-5">
@@ -69,7 +73,9 @@ export default function BlogContent() {
           <BlogCard key={blog?.id} blog={blog} />
         ))}
         {state?.isMorePage ? (
-          <div ref={targetRef}><LoadingSpinner/></div>
+          <div ref={targetRef}>
+            <LoadingSpinner />
+          </div>
         ) : (
           <p>No more blogs.</p>
         )}

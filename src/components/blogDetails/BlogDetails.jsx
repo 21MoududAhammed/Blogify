@@ -8,6 +8,7 @@ import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import useFetchSingleBlog from "../../hooks/useFetchSingleBlog";
+import LoadingSpinner from "../common/LoadingSpinner";
 export default function BlogDetails() {
   // blogId
   const { id } = useParams();
@@ -34,8 +35,13 @@ export default function BlogDetails() {
     setBlogComments(blog?.comments);
   }, [blog]);
 
-  if (loading) return <div>Loading....</div>;
-  if (error) return <div>{error}</div>;
+  if (loading)
+    return (
+      <div className="my-5">
+        <LoadingSpinner />
+      </div>
+    );
+  if (error) return <div>Failed to data fetch. Please try again.</div>;
 
   return (
     <>
